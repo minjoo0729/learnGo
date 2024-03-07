@@ -5,15 +5,19 @@ import (
 	"time"
 )
 
-func main(){
-	go sexyCount("nico")
-	go sexyCount("flynn")
+func main() {
+	c := make(chan bool)
+	people := [2]string{"nico", "flynn"}
+	for _, person := range people {
+		go isSexy(person, c)
+	}
+	result := <- c
+	fmt.Println(result)
 	time.Sleep(time.Second * 5)
 }
 
-func sexyCount(person string) {
-	for i := 0; i < 10; i++ {
-		fmt.Println(person, "is sexy", i)
-		time.Sleep(time.Second)
-	}
+func isSexy(person string, c chan bool) {
+	fmt.Println(person)
+	time.Sleep(time.Second * 5)
+	c <- true
 }
